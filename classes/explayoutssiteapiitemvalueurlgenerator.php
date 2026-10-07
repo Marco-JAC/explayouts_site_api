@@ -7,7 +7,10 @@ class expLayoutsSiteApiItemValueUrlGenerator
             return $value->urlAlias();
 
         if ( $value instanceof expSiteApiContent )
-            return $value->mainLocationId() > 0 ? '/' . eZURLAliasML::fetchByNodeID( $value->mainLocationId() ) : '';
+        {
+            $node = $value->mainLocationId() > 0 ? eZContentObjectTreeNode::fetch( (int)$value->mainLocationId() ) : null;
+            return $node instanceof eZContentObjectTreeNode ? '/' . $node->attribute( 'url_alias' ) : '';
+        }
 
         return '';
     }
